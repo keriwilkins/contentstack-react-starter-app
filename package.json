@@ -1,0 +1,29 @@
+{
+  "name": "react-starter-app-e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.{ts,tsx} --quiet --fix",
+    "lint-ts": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
+    "show-report": "npx playwright show-report",
+    "test:chrome": "npx playwright test --config=playwright.config.ts --project=Chromium",
+    "test:firefox": "npx playwright test --config=playwright.config.ts --project=firefox",
+    "test:chrome-headed": "npx playwright test --headed --config=playwright.config.ts --project=Chromium",
+    "test:firefox-headed": "npx playwright test --headed --config=playwright.config.ts --project=firefox"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.21.1"
+  },
+  "dependencies": {
+    "axios": "^0.26.1",
+    "dotenv": "^16.0.0"
+  }
+}

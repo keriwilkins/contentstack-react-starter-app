@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { MarketplaceStarter } from "../pages/marketplace-starter";
 
-test.skip('marketplace cancellation flow', async ({ page }) => {
+test('marketplace cancellation flow', async ({ page }) => {
     const MP = new MarketplaceStarter(page);
     await MP.visitMarketplace(); // go to marketplace url
     await expect(page).toHaveURL('/#!/marketplace/starters'); // check marketplace url

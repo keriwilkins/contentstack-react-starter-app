@@ -87,6 +87,7 @@ export class MarketplaceStarter {
     async stackLinkResolver(stackPage: Page) {
         const getStackUrl = await this.page.locator('[data-test-id="cs-link"] >> .flex-v-center').nth(0).innerText();
         const getKeys = (new URL(getStackUrl)).hash;
+        //@ts-ignore
         this.apiKey = (getKeys?.match('[a-z0-9]{10,30}'))[0];
         stackPage.goto(getStackUrl);
         await expect(stackPage).toHaveURL(`/#!/stack/${this.apiKey}/dashboard`)
@@ -111,5 +112,4 @@ export class MarketplaceStarter {
         await expect(vercelPage.url()).toContain(this.starterAppName);
         vercelPage.close();
     }
-
 }

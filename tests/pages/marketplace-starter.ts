@@ -21,10 +21,12 @@ export class MarketplaceStarter {
             await authorized.click();
         }
         else if ((await this.page.$('text="Read More"')) !== null) {
-            const checkButton = expect(this.page.locator('text="Read More"')).toHaveText('Read More');
-            checkButton && await this.page.locator('text="Read More"').click();
+            // const checkButton = await expect(this.page.locator('text="Read More"')).toHaveText('Read More');
+            // checkButton && 
+            await this.page.locator('text="Read More"').click();
             await this.page.waitForTimeout(500);
-            checkButton && this.checkReadMore()
+            // checkButton && 
+            this.checkReadMore()
         }
     }
 
@@ -49,7 +51,7 @@ export class MarketplaceStarter {
     // stack import
     async starterDetails() {
         const stackName = await this.page.locator(`input[placeholder="${process.env.CONTENTSTACK_STARTER_APP}"]`);
-        this.starterAppName = (process.env.CONTENTSTACK_STARTER_APP).toLowerCase().replace(/ /g, "-") + "-" + Math.floor(Math.random() * 1000) + 1;
+        this.starterAppName = (process.env.CONTENTSTACK_STARTER_APP)?.toLowerCase().replace(/ /g, "-") + "-" + Math.floor(Math.random() * 1000) + 1;
         await stackName.type(this.starterAppName.toString());
         await this.page.locator('text="Import Starter"').click();
     }
@@ -66,17 +68,6 @@ export class MarketplaceStarter {
         const deployButton = await this.page.waitForSelector('button:has-text("Deploy to Vercel")');
         await this.page.waitForTimeout(5000);
         const [popup] = await Promise.all([this.page.waitForEvent('popup'), await deployButton.click()]);
-        // provide cross origin access
-        await popup.route('**/*', (route, request) => {
-            const headers = {
-                ...request.headers(),
-                'Access-Control-Allow-Credential': 'true',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-                'Access-Control-Allow-Headers': 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-            };
-            route.continue({ headers });
-        });
         await popup.waitForLoadState();
         const titleCheck = await popup.title();
         await expect(titleCheck).toBe('New Project – Vercel')
@@ -96,7 +87,7 @@ export class MarketplaceStarter {
     async stackLinkResolver(stackPage: Page) {
         const getStackUrl = await this.page.locator('[data-test-id="cs-link"] >> .flex-v-center').nth(0).innerText();
         const getKeys = (new URL(getStackUrl)).hash;
-        this.apiKey = (getKeys.match('[a-z0-9]{10,30}'))[0];
+        this.apiKey = (getKeys?.match('[a-z0-9]{10,30}'))[0];
         stackPage.goto(getStackUrl);
         await expect(stackPage).toHaveURL(`/#!/stack/${this.apiKey}/dashboard`)
         await stackPage.waitForLoadState();

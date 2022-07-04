@@ -28,5 +28,7 @@ CONTENTSTACK_PASSWORD = contentstack_password
 GITHUB_LOGIN_ID= github_login
 GITHUB_PASSWORD= github_password
 BASE_API_URL= api_host_url
-
+SECRET_KEY= 2FA Secret key
 ```
+
+> **_NOTE:_** How to generate [[2FA Secret code](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication)]

@@ -2,4 +2,6 @@ node_modules/
 test-results/
 playwright-report/
 .env
+.env.development
+.env.staging
 storageState.json

@@ -66,17 +66,12 @@ export class MarketplaceStarter {
     // vercel authentication and deployment
     async vercelAuthenticate() {
         const deployButton = await this.page.waitForSelector('button:has-text("Deploy to Vercel")');
-        await this.page.waitForTimeout(5000);
         const [popup] = await Promise.all([this.page.waitForEvent('popup'), await deployButton.click()]);
         await popup.waitForLoadState();
         const titleCheck = await popup.title();
         await expect(titleCheck).toBe('New Project – Vercel')
-        await popup.waitForSelector('button[value="github"]');
-        await popup.locator('button[value="github"]').click();
-        await popup.locator('[data-geist-button] >> span:has-text("Create")').click();
         await popup.waitForTimeout(4000);
-        const isCreate = await popup.locator('[data-geist-button] >> span:has-text("Create")').isVisible();
-        isCreate && await popup.locator('[data-geist-button] >> span:has-text("Create")').click();
+        await popup.locator('button:has-text("Create")',{force: true}).click();
 
         expect(await popup.waitForSelector('button:has-text("Add")', { state: 'visible' })).toBeTruthy();
         await popup.locator('button:has-text("Add")').click();
@@ -102,6 +97,7 @@ export class MarketplaceStarter {
         await githubPage.goto(githubLink);
         await githubPage.waitForLoadState();
         await expect(githubPage.url()).toContain(this.starterAppName);
+        await githubPage.close();
     }
 
     // verify newly deployed vercel Link

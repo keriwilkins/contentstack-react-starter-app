@@ -29,3 +29,26 @@ export async function deleteStack(apiKey: string, authToken: string) {
     }
     await axios(axiosObj);
 }
+
+export async function githubAuthentication(){
+    const axiosObj: AxiosRequestConfig = {
+        url: 'https://api.github.com/orgs/ORG/repos',
+        headers: {
+            'Accept':'application/vnd.github+json',
+            'Authorization':'token ',
+            'Content-Type':'application/x-www-form-urlencoded'
+        }
+    }
+}
+
+export async function deleteGitRepo(owner: string, repoName: string, authToken: string) {
+    const axiosObj: AxiosRequestConfig = {
+        url: `https://api.github.com/repos/${owner}/repos/${repoName}`,
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/vnd.github+json',
+            'Authorization': authToken
+        }
+    }
+    await axios(axiosObj);
+}

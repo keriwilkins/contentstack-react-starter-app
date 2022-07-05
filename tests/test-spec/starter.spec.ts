@@ -33,7 +33,6 @@ test.describe('marketplace starter app installation', async () => {
     test('visit marketplace', async () => {
         await MP.visitMarketplace(); //go to marketplace
         await expect(page).toHaveURL('/#!/marketplace/starters'); // check url
-        await page.waitForTimeout(1000);
     })
 
     test('locate starter app from list', async () => {
@@ -47,8 +46,6 @@ test.describe('marketplace starter app installation', async () => {
 
     test('Added starter details', async () => {
         await MP.starterDetails(); // add app name and start importing stack export
-        expect(await page.waitForSelector('button:has-text("Deploy to Vercel")',
-            { state: 'visible' })).toBeTruthy();// check and wait for deploy button to me available on dom
     })
 
     test('deploy app on vercel', async () => {

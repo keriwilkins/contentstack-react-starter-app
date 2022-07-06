@@ -1,10 +1,13 @@
 import { expect, Page } from "@playwright/test"
 export class MarketplaceStarter {
+
     readonly page
-    apiKey: string;
+    readonly cancelFlowPage
     starterAppName: string;
-    constructor(page: Page) {
+    apiKey: string;
+    constructor(page: Page, cancelFlowPage:Page) {
         this.page = page;
+        this.cancelFlowPage = cancelFlowPage;
     }
     async visitMarketplace() {
         await this.page.goto('/#!/marketplace/starters') //go to marketplace
@@ -12,6 +15,7 @@ export class MarketplaceStarter {
     async findStarterApp() {
         await this.page.locator(`text=${process.env.CONTENTSTACK_STARTER_APP}`).click();
         await this.page.locator('.ReactModalPortal >> text="Install Starter"').click();
+        return await this.page.url();
     }
 
     // Marketplace oauth checker
@@ -21,24 +25,22 @@ export class MarketplaceStarter {
             await authorized.click();
         }
         else if ((await this.page.$('text="Read More"')) !== null) {
-            // const checkButton = await expect(this.page.locator('text="Read More"')).toHaveText('Read More');
-            // checkButton && 
             await this.page.locator('text="Read More"').click();
             await this.page.waitForTimeout(500);
-            // checkButton && 
             this.checkReadMore()
         }
     }
 
     // cancel installation flow
     async cancelFlow() {
-        await this.page.locator('text="Cancel"').click();
-        await this.page.waitForTimeout(2000);
+        await this.cancelFlowPage.locator('text="Cancel"').click();
+        await this.cancelFlowPage.waitForTimeout(2000);
     }
 
     // navigate to unauthorized screen
     async cancelScreen() {
-        await expect(this.page.locator('.error')).toHaveText('Permission Denied - No user permissions')
+        await expect(this.cancelFlowPage.locator('.error')).toHaveText('Permission Denied - No user permissions')
+        await this.cancelFlowPage.close();
     }
 
     // check for Read More button
@@ -70,10 +72,9 @@ export class MarketplaceStarter {
         await popup.waitForLoadState();
         const titleCheck = await popup.title();
         await expect(titleCheck).toBe('New Project – Vercel')
-        await popup.waitForTimeout(4000);
-        await popup.locator('button:has-text("Create")',{force: true}).click();
-
-        expect(await popup.waitForSelector('button:has-text("Add")', { state: 'visible' })).toBeTruthy();
+        await popup.waitForTimeout(4000); // needed delay for dom node changes
+        await popup.locator('button:has-text("Create")', { force: true }).click();
+        expect(await popup.waitForSelector('button:has-text("Add")', { state: 'visible' })).toBeTruthy();// wait for selector
         await popup.locator('button:has-text("Add")').click();
         expect(await this.page.locator('.Info__content success', { state: 'visible' })).toBeTruthy();
     }
@@ -98,6 +99,7 @@ export class MarketplaceStarter {
         await githubPage.waitForLoadState();
         await expect(githubPage.url()).toContain(this.starterAppName);
         await githubPage.close();
+        return this.starterAppName;;
     }
 
     // verify newly deployed vercel Link
@@ -107,5 +109,6 @@ export class MarketplaceStarter {
         await vercelPage.waitForLoadState();
         await expect(vercelPage.url()).toContain(this.starterAppName);
         vercelPage.close();
+        return this.starterAppName;
     }
 }

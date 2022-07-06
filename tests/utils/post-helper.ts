@@ -30,24 +30,36 @@ export async function deleteStack(apiKey: string, authToken: string) {
     await axios(axiosObj);
 }
 
-export async function githubAuthentication(){
+export async function githubAuthentication() {
     const axiosObj: AxiosRequestConfig = {
         url: 'https://api.github.com/orgs/ORG/repos',
         headers: {
-            'Accept':'application/vnd.github+json',
-            'Authorization':'token ',
-            'Content-Type':'application/x-www-form-urlencoded'
+            'Accept': 'application/vnd.github+json',
+            'Authorization': 'token ',
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
     }
 }
 
-export async function deleteGitRepo(owner: string, repoName: string, authToken: string) {
+export async function deleteGitRepo(repoName: string) {
     const axiosObj: AxiosRequestConfig = {
-        url: `https://api.github.com/repos/${owner}/repos/${repoName}`,
+        url: `https://api.github.com/repos/${process.env.GIT_OWNER_NAME}/${repoName}`,
         method: 'DELETE',
         headers: {
             'Accept': 'application/vnd.github+json',
-            'Authorization': authToken
+            'Authorization': `token ${process.env.GITHUB_TOKEN}`
+        }
+    }
+    await axios(axiosObj);
+}
+
+export async function deleteVercelProject(projectName: string) {
+
+    const axiosObj: AxiosRequestConfig = {
+        url: `https://api.vercel.com/v9/projects/${projectName}`,
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${process.env.VERCEL_TOKEN}`
         }
     }
     await axios(axiosObj);

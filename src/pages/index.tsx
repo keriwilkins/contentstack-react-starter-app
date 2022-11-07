@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
 import RenderComponents from '../components/render-components';
 import Skeleton from 'react-loading-skeleton';
 import { PageEntry } from '../typescript/pages';
 import useFetchEntry from '../hooks/useFetchEntry';
+import { onEntryChange } from '../sdk/entry.d';
 
 export default function Home() {
-  const fetch = useFetchEntry();
+  const fetchData = useFetchEntry();
   const params = useParams();
   const [getEntries, setEntries] = useState({} as PageEntry);
 
   useEffect(() => {
-    fetch().then((data) => setEntries(data));
+    onEntryChange(() => {
+      fetchData().then((data) => setEntries(data));
+    });
   }, [params.page]);
 
   return Object.keys(getEntries).length ? (

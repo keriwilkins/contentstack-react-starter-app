@@ -1,22 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import ArchiveRelative from "../components/archive-relative";
-import RenderComponents from "../components/render-components";
-import { onEntryChange } from "../sdk/entry.d";
-import BlogList from "../components/blog-list";
-import { getBlogListRes, getPageRes } from "../helper/index.d";
-import Skeleton from "react-loading-skeleton";
-import { Prop, Entry, ArchiveBlogList, BlogData } from "../typescript/pages";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ArchiveRelative from '../components/archive-relative';
+import RenderComponents from '../components/render-components';
+import { onEntryChange } from '../sdk/entry.d';
+import BlogList from '../components/blog-list';
+import { getBlogListRes, getPageRes } from '../helper/index.d';
+import Skeleton from 'react-loading-skeleton';
+import { Prop, Entry, ArchiveBlogList, BlogData } from '../typescript/pages';
+import useFetchEntry from '../hooks/useFetchEntry';
 
 export default function Blog({ entry }: Prop) {
+  const fetch = useFetchEntry();
   const history = useNavigate();
   const [getEntry, setEntry] = useState({} as Entry);
-  const [getList, setList] = useState({ archive:{} as ArchiveBlogList, list: [] });
+  const [getList, setList] = useState({
+    archive: {} as ArchiveBlogList,
+    list: [],
+  });
   const [error, setError] = useState(false);
 
   async function fetchData() {
     try {
-      const blog = await getPageRes("/blog");
+      const blog = await getPageRes('/blog');
       const result = await getBlogListRes();
       (!blog || !result) && setError(true);
 
@@ -45,7 +50,7 @@ export default function Blog({ entry }: Prop) {
   }, []);
 
   useEffect(() => {
-    error && history("/404");
+    error && history('/404');
   }, [error]);
 
   return (
@@ -54,15 +59,15 @@ export default function Blog({ entry }: Prop) {
         <RenderComponents
           pageComponents={getEntry.page_components}
           blogsPage
-          contentTypeUid="page"
+          contentTypeUid='page'
           entryUid={getEntry.uid}
           locale={getEntry.locale}
         />
       ) : (
         <Skeleton height={400} />
       )}
-      <div className="blog-container">
-        <div className="blog-column-left">
+      <div className='blog-container'>
+        <div className='blog-column-left'>
           {Object.keys(getList.list).length ? (
             getList.list.map((bloglist, index) => (
               <BlogList bloglist={bloglist} key={index} />
@@ -71,9 +76,10 @@ export default function Blog({ entry }: Prop) {
             <Skeleton height={400} width={400} count={3} />
           )}
         </div>
-        <div className="blog-column-right">
-          {Object.keys(getEntry).length && getEntry.page_components[1].widget ? (
-            <h2 {...getEntry?.page_components[1].widget.$?.title_h2 as {}}>
+        <div className='blog-column-right'>
+          {Object.keys(getEntry).length &&
+          getEntry.page_components[1].widget ? (
+            <h2 {...(getEntry?.page_components[1].widget.$?.title_h2 as {})}>
               {getEntry?.page_components[1].widget.title_h2}
             </h2>
           ) : (

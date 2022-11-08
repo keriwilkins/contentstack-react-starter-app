@@ -4,7 +4,6 @@ import RenderComponents from '../components/render-components';
 import Skeleton from 'react-loading-skeleton';
 import { PageEntry } from '../typescript/pages';
 import useFetchEntry from '../hooks/useFetchEntry';
-import { onEntryChange } from '../sdk/entry.d';
 
 export default function Home() {
   const fetchData = useFetchEntry();
@@ -12,10 +11,8 @@ export default function Home() {
   const [getEntries, setEntries] = useState({} as PageEntry);
 
   useEffect(() => {
-    onEntryChange(() => {
-      fetchData().then((data) => setEntries(data));
-    });
-  }, [params.page]);
+    fetchData().then((data) => setEntries(data));
+  }, [params]);
 
   return Object.keys(getEntries).length ? (
     <RenderComponents

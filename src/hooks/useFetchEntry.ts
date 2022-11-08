@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useMatch } from 'react-router-dom';
 import { getPageRes } from '../helper/index.d';
+import { onEntryChange } from '../sdk/entry.d';
 import { PageEntry } from '../typescript/pages';
 
 export default function useFetchEntry() {
@@ -10,13 +11,15 @@ export default function useFetchEntry() {
   const params = useParams();
   const match = useMatch('/blog');
   const entryUrl = params.page ? `/${params.page}` : '/';
+
   useEffect(() => {
-    error && history('/404');
-  }, [error]);
+    onEntryChange(() => fetchEntry().then((data) => setEntries(data)));
+  }, [params.page]);
 
   useEffect(() => {
     if (getEntries.url !== entryUrl) fetchEntry();
-  }, [entryUrl]);
+    error && history('/404');
+  }, [entryUrl, error]);
 
   const fetchEntry = async () => {
     try {

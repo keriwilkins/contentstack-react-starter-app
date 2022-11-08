@@ -21,6 +21,7 @@ export default function Blog({ entry }: Prop) {
 
   async function fetchData() {
     try {
+      fetch().then((data) => console.log(data));
       const blog = await getPageRes('/blog');
       const result = await getBlogListRes();
       (!blog || !result) && setError(true);

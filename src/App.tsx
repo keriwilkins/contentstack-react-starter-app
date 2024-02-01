@@ -23,15 +23,8 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<Layout entry={getEntry} />}>
-          <Route index element={<Home entry={getPageRes} />} />
-          <Route path="/:page" element={<Home entry={getPageRes} />} />
-          <Route path="/blog" element={<Blog entry={getPageRes} />} />
-          <Route
-            path="/blog/:blogId"
-            element={<BlogPost entry={getPageRes} />}
-          />
-          <Route path="/404" element={<Error />}></Route>
-          <Route path="*" element={<Error />}></Route>
+          {/* <Route index element={<Home entry={getPageRes} />} /> */}
+          <h1>Testing</h1>
         </Route>
       </Routes>
     </div>

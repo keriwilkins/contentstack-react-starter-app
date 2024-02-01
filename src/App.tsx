@@ -21,7 +21,10 @@ function App() {
 
   return (
     <div className="App">
-        <h1>Testing App TSX</h1>
+      <Routes>
+        <Route path="/" element={<Layout entry={getEntry} />} >
+        </Route>
+      </Routes>
     </div>
   );
 }

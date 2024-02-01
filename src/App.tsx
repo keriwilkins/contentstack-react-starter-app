@@ -21,12 +21,7 @@ function App() {
 
   return (
     <div className="App">
-      <Routes>
-        <Route path="/" element={<Layout entry={getEntry} />}>
-          {/* <Route index element={<Home entry={getPageRes} />} /> */}
-          <h1>Testing</h1>
-        </Route>
-      </Routes>
+        <h1>Testing App TSX</h1>
     </div>
   );
 }

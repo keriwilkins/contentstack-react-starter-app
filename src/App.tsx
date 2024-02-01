@@ -21,10 +21,13 @@ function App() {
 
   return (
     <div className="App">
+      <>
       <Routes>
         <Route path="/" element={<Layout entry={getEntry} />} >
+          
         </Route>
       </Routes>
+      </>
     </div>
   );
 }
